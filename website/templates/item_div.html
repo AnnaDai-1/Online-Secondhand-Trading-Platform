@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}{% endblock %}
+{% block content %}
+  <h1 align="center">{% block header %} Items {% endblock %}</h1>
+  <br/>
+
+  <div class="row">
+    {% for item in items %}
+      <div class="col-sm-6 col-md-4 col-lg-3 mb-3">
+        <div class="card" style="width: 100%">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <a href="/items/{{item.user_id}}">{{item.user.username}}</a>
+            {% if user.id == item.user_id %}
+              <div class="btn-group">
+                <button type="button" class="btn btn-sm btn-primary dropdown-toggle" data-bs-toggle="dropdown"></button>
+                <ul class="dropdown-menu">
+                  <li>
+                    <a href="/delete-item/{{item.id}}" class="dropdown-item">Delete</a>
+                    <a href="/edit/{{item.id}}" class="dropdown-item">Edit</a>
+                  </li>
+                </ul>
+              </div>
+            {% endif %}
+          </div>
+
+          <img class="img-fluid" src="{{ url_for('static', filename='img/' + item.thumbnail) }}" alt="" />
+
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item">{{item.title}}</li>
+            <li class="list-group-item">$ {{item.price}}</li>
+          </ul>
+
+          <div class="card-body">
+            <a href="/single_item/{{item.id}}" class="card-link">Details</a>
+          </div>
+          <div class="card-footer text-muted">{{item.date_created}}</div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+
+  {% block footer %}{% endblock %}
+{% endblock %}

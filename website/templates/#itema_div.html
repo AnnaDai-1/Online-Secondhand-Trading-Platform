@@ -1,0 +1,41 @@
+{% extends "base.html" %} {% block title%}{%endblock%} {% block content%}
+<h1 align="center">{% block header %} Items {% endblock %}</h1>
+<div id="items">
+    {% for item in items %}
+    <div class="card border-dark">
+        <div class="card-header d-flex justify-content-between align-item-center">
+            <a href="/items/{{item.user_id}}">{{item.user.username}}</a>
+            {% if user.id == item.user_id %}
+            <div class="btn-group">
+                <button
+                  type="button"
+                  class="btn btn-sm btn-primary dropdown-toggle"
+                  data-bs-toggle="dropdown"
+                ></button>
+                <ul class="dropdown-menu">
+                  <li>
+                    <a href="/delete-item/{{item.id}}" class="dropdown-item"
+                      >Delete</a
+                    >
+  
+                  </li>
+                </ul>
+              </div>
+            {% endif %}
+        </div> 
+        <div class="card-body">
+            <h5 class="card-title">{{item.title}}</h5>
+            <img class="img-fluid" src="{{ url_for('static', filename='img/' + item.image_filename) }}" alt=""/>
+
+            <p class="card-text">{{item.description}}</p>
+            
+        </div>
+        <div class="card-footer text-muted">{{item.date_created}}</div>
+    </div>
+    <br/>
+    {% endfor %}
+
+</div>
+{% block footer%}
+{%endblock%}
+{%endblock%}

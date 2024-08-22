@@ -1,0 +1,86 @@
+{% extends "items.html" %} {% block title%}{%endblock%} {% block content%}
+
+<br />
+<div class="card">
+  <div class="card-header" align="center" style="font-size: 30px">
+    {%if state == true %}
+      {{title}} (Available)
+    {%else%}
+    {{title}} (Not available)
+    {%endif%}
+  </div>
+  <ul class="list-group list-group-flush">
+    <li class="list-group-item" , align="center">Price: ${{price}}</li>
+    <li class="list-group-item" , align="center">
+      Description: {{description}}
+    </li>
+  </ul>
+</div>
+
+<br />
+{% for image in images%}
+<div class="text-center">
+  <img
+    class="img-fluid"
+    src="{{ url_for('static', filename='img/' + image.filename) }}"
+    alt=""
+  />
+</div>
+{% endfor %}
+
+<br />
+<div class="collapse" id="comments-{{item.id}}">
+  <div class="card">
+    <div class="card-header" align="center">Comments</div>
+    <div class="card-body" id="comments-expanded-{{item.id}}">
+      {% for comment in item.comments %}
+      <div class="d-flex justify-content-between align-items-center">
+        <div>
+          <a href="/items/{{comment.user.username}}"
+            >{{comment.user.username}}</a
+          >: {{comment.text}}
+        </div>
+        <div class="text-right">
+          <small class="text-muted">{{comment.date_created}}</small>
+          {% if user.id == comment.user.id %}
+          <a
+            href="/delete_comment/{{comment.id}}"
+            class="btn btn-close"
+            aria-label="Close"
+            ></a
+          >
+          {% endif %}
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+<p class="card-text">
+  {% if item.comments|length > 0 %}
+  <a data-bs-toggle="collapse" href="#comments-{{item.id}}" role="button">
+    <small>View {{item.comments|length}} Comments</small>
+  </a>
+  {% else %}
+  <small class="text-muted">No Comments</small>
+  {% endif %}
+</p>
+
+<br />
+<div class="card-body">
+  <form
+    class="input-group mb-3"
+    method="POST"
+    action="/create_comment/{{item.id}}"
+  >
+    <input
+      type="text"
+      id="text"
+      name="text"
+      class="form-control"
+      placeholder="Leave a Comment!"
+    />
+    <button type="submit" class="btn btn-primary">Comment</button>
+  </form>
+</div>
+{%endblock%}
